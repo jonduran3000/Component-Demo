@@ -21,7 +21,12 @@ class ForgotPasswordFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         // Bind views here
         Coordinators.bind(emailLayout) {
-            TextInput(this, TextInput.Model(EmailValidator()))
+            TextInput(
+                lifecycleOwner = this,
+                model = TextInput.Model(EmailValidator()),
+                emptyTextError = "Please enter your email address",
+                invalidTextError = "This is not a valid email address"
+            )
         }
     }
 }

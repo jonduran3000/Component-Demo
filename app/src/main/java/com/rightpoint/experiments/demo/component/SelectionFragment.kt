@@ -21,7 +21,7 @@ class SelectionFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         screens.adapter = SelectionAdapter(requireContext())
-        screens.setOnItemClickListener { adapterView, view, i, l ->
+        screens.setOnItemClickListener { _, _, i, _ ->
             val screen = Screen.values()[i]
             (requireActivity() as MainActivity).goToScreen(screen)
         }

@@ -21,7 +21,12 @@ class LoginFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         // Bind views here
-        val input = TextInput(this, TextInput.Model(EmailValidator()))
+        val input = TextInput(
+            lifecycleOwner = this,
+            model = TextInput.Model(EmailValidator()),
+            emptyTextError = "Please enter your email address",
+            invalidTextError = "This is not a valid email address"
+        )
         input.state.observe(this, Observer {
             // You can observe the component's current state here
         })

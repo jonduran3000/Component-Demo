@@ -13,7 +13,9 @@ import com.google.android.material.textfield.TextInputLayout
 
 class TextInput(
     lifecycleOwner: LifecycleOwner,
-    model: Model
+    model: Model,
+    private val emptyTextError: String,
+    private val invalidTextError: String
 ) : Component<TextInput.State, TextInput.Action, TextInput.Model>(lifecycleOwner, model) {
     private var layout: TextInputLayout? = null
     private var input: TextInputEditText? = null
@@ -48,8 +50,8 @@ class TextInput(
     override fun onChanged(state: State?) {
         internalState.postValue(state)
         layout?.error = when (state) {
-            State.EmptyEmail -> "Please enter your email address"
-            State.InvalidEmail -> "This is not a valid email address"
+            State.EmptyText -> emptyTextError
+            State.InvalidText -> invalidTextError
             else -> null
         }
     }
@@ -59,27 +61,27 @@ class TextInput(
     }
 
     sealed class State : Component.State {
-        object EmptyEmail : State()
-        object InvalidEmail : State()
-        object ValidEmail : State()
+        object EmptyText : State()
+        object InvalidText : State()
+        object ValidText : State()
     }
 
     class Model(private val validator: Validator) : Function<Action, State> {
         override fun apply(input: Action?): State {
             return when(input) {
                 is Action.OnTextChange -> validate(input.text)
-                else -> State.EmptyEmail
+                else -> State.EmptyText
             }
         }
 
         private fun validate(text: CharSequence?): State {
             return if (TextUtils.isEmpty(text)) {
-                State.EmptyEmail
+                State.EmptyText
             } else {
                 if (validator.isValid(text!!)) {
-                    State.ValidEmail
+                    State.ValidText
                 } else {
-                    State.InvalidEmail
+                    State.InvalidText
                 }
             }
         }
